@@ -1,0 +1,4 @@
+load_project testsave.dat
+show
+save_project testsave2.dat
+exit
