@@ -1,10 +1,7 @@
 import cmd
 import argparse
-
-from BadSmellThree.BadSmellThreeRefactored.Data import Data
-from BadSmellThree.BadSmellThreeRefactored.Charts.PieChart import PieChart
-
-
+from Data import *
+from Charts.ChartCreator import *
 class Controller(cmd.Cmd):
     def __init__(self):
         cmd.Cmd.__init__(self)
@@ -56,9 +53,21 @@ Show the current loaded data tables: show
         """
 Will create Pie Chart.
         """
-        pieChart = PieChart(self.data)
-        if (pieChart.setupChart()):
-            pieChart.drawChart()
+        pieChartTemplate = PieChartCreator()
+        if (pieChartTemplate.setupChart(self.data)):
+            myChart = pieChartTemplate.returnChart()
+            if (isinstance(myChart, PieChart)):
+                myChart.drawChart()
+
+    def do_make_barchart(self, line):
+        """
+Will create Pie Chart.
+        """
+        barChartTemplate = BarChartCreator()
+        if (barChartTemplate.setupChart(self.data)):
+            myChart = barChartTemplate.returnChart()
+            if (isinstance(myChart, BarChart)):
+                myChart.drawChart()
 
     def do_exit(self, line):
         'Exit the program'
