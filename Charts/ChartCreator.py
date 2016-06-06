@@ -1,4 +1,4 @@
-from Charts.PieChart import *
+from Charts.Chart import *
 
 class ChartCreator():
     chartTitle = None
