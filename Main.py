@@ -42,12 +42,14 @@ Load project from the specified file and location: load_project myproject.dat
         print('load_project')
         self.data.loadProject(loadString)
 
-    def do_show(self, line):
+    def do_show(self, tableName):
         """
 Show the current loaded data tables: show
         """
-        print('show')
-        self.data.printData()
+        l = tableName.split()
+        if len(l) < 2:
+            print('show')
+            self.data.printData(tableName)
 
     def do_make_piechart(self, line):
         """

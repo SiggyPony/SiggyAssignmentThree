@@ -16,23 +16,39 @@ class ChartCreator():
             return False
         if not self.getValueData():
             return False
+        if not self.getExtraInfo():
+            return False
+
         return True
 
     def getSourceTables(self):
-        self.tableName = input("Input source table name>")
+        raise NotImplementedError
+
+    def getLabelData(self):
+        raise NotImplementedError
+
+    def getValueData(self):
+        raise NotImplementedError
+
+    def returnChart(self):
+        raise NotImplementedError
+
+    def getExtraInfo(self):
+        raise NotImplementedError
+
+
+
+class  PieChartCreator(ChartCreator):
+    def getSourceTables(self):
+        self.tableName = input("Input source table name for PieChart data>")
         if not(self.tableName in self.sourceData.data.keys()):
             print("Table not found.")
             return False
-        # Show columns
-        listOfColumns = "Coloumns in " + self.tableName + ": "
-        for col in range(0, len(self.sourceData.data[self.tableName][0])):
-            listOfColumns = listOfColumns + \
-                            (self.sourceData.data[self.tableName][col][0]) + " "
-        print(listOfColumns)
+        self.sourceData.printData(self.tableName)
         return True
 
     def getLabelData(self):
-        chartLabels = input("Input column for labels>")
+        chartLabels = input("Input data column to be used for labels>")
         chartLabelsData = None
         for col in range(0, len(self.sourceData.data[self.tableName][0])):
             if self.sourceData.data[self.tableName][col][0] == chartLabels:
@@ -46,7 +62,7 @@ class ChartCreator():
         return True
 
     def getValueData(self):
-        chartValuesTemp = input("Input column for values>")
+        chartValuesTemp = input("Input data column to be used for values>")
         for col in range(0, len(self.sourceData.data[self.tableName][0])):
             if self.sourceData.data[self.tableName][col][0] == chartValuesTemp:
                 for item in range(1, len(self.sourceData.data[self.tableName]
@@ -65,11 +81,9 @@ class ChartCreator():
         print("Must give a valid column name.")
         return False
 
-    def returnChart(self):
-        pass
+    def getExtraInfo(self):
+        return True
 
-
-class  PieChartCreator(ChartCreator):
     def returnChart(self):
         tempReturnChart = PieChart((self.chartTitle, self.chartLabels, self.chartValues))
         return tempReturnChart
@@ -78,6 +92,51 @@ class  PieChartCreator(ChartCreator):
 
 
 class BarChartCreator(ChartCreator):
+    def getSourceTables(self):
+        self.tableName = input("Input source table name for BarChart data>")
+        if not(self.tableName in self.sourceData.data.keys()):
+            print("Table not found.")
+            return False
+        self.sourceData.printData(self.tableName)
+        return True
+
+    def getLabelData(self):
+        chartLabels = input("Input data column to be used for labels>")
+        chartLabelsData = None
+        for col in range(0, len(self.sourceData.data[self.tableName][0])):
+            if self.sourceData.data[self.tableName][col][0] == chartLabels:
+                chartLabelsData = self.sourceData.data[self.tableName][col][:]
+        if (chartLabelsData is None):
+            print("Must give a valid column name.")
+            return False
+        del chartLabelsData[0]
+        print(chartLabelsData)
+        self.chartLabels = chartLabelsData
+        return True
+
+    def getValueData(self):
+        chartValuesTemp = input("Input data column to be used for values>")
+        for col in range(0, len(self.sourceData.data[self.tableName][0])):
+            if self.sourceData.data[self.tableName][col][0] == chartValuesTemp:
+                for item in range(1, len(self.sourceData.data[self.tableName]
+                                         [col])):
+                    if not(re.match('^[0-9]*$',
+                                    self.sourceData.data[self.tableName][col]
+                                    [item])):
+                        print("False")
+                        print("Column must only contain numbers")
+                        return False
+                chartValuesData = self.sourceData.data[self.tableName][col][:]
+                del chartValuesData[0]
+                print(chartValuesData)
+                self.chartValues = chartValuesData
+                return True
+        print("Must give a valid column name.")
+        return False
+
+    def getExtraInfo(self):
+        return True
+
     def returnChart(self):
         tempReturnChart = BarChart((self.chartTitle, self.chartLabels, self.chartValues))
         return tempReturnChart

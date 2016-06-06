@@ -57,17 +57,33 @@ class Data:
             print('You must give a valid csv file name and path .')
             print('Eg. ./data3.csv')
 
-    def printData(self):
+    def printData(self, tableTemp=None):
         # TODO find largest value and space each row appropriately
-        print('Printing loaded tables data')
         line = ''
+        printSingle = False
+        if (tableTemp in self.data.keys()):
+            printSingle = True
+        else:
+            print('Printing loaded tables data')
         for tableName, table in self.data.items():
-            print(tableName)
-            for i in range(0, len(table[0])):
-                for x in range(0, len(table)):
-                    line = line + '   ' + (str(table[x][i]))
-                print(line)
-                line = ''
+            if (printSingle == True):
+                if (tableTemp == tableName):
+                    print("Printing table " + tableName)
+                    print(tableName)
+                    for i in range(0, len(table[0])):
+                        for x in range(0, len(table)):
+                            line = line + '   ' + (str(table[x][i]))
+                        print(line)
+                        line = ''
+            else:
+                print(tableName)
+                for i in range(0, len(table[0])):
+                    for x in range(0, len(table)):
+                        line = line + '   ' + (str(table[x][i]))
+                    print(line)
+                    line = ''
+
+
 
     def loadProject(self, loadString):
         try:
